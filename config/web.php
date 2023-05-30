@@ -42,10 +42,12 @@ $config = [
             ],
         ],
         'db' => $db,
+        'defaultRoute' => 'book/index',
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
+                '' => '',
             ],
         ],
     ],
