@@ -28,9 +28,11 @@ class Author extends \yii\db\ActiveRecord
      */
     public function rules()
     {
+        $messageTooLong = '{attribute} до {max} символов';
+        $messageTooShort = '{attribute} от {min} символов.';
         return [
-            [['author_name'], 'required'],
-            [['author_name'], 'string', 'max' => 255],
+            [['author_name'], 'required','message' => 'Заполните имя автора'],
+            [['author_name'], 'string', 'min' => 3, 'max' => 50, 'tooLong' => $messageTooLong, 'tooShort' => $messageTooShort ],
         ];
     }
 

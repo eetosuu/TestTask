@@ -30,7 +30,18 @@ class AuthorController extends Controller
 
     public function actionAdd()
     {
-
+        $author = new Author();
+        if (Yii::$app->request->isPost) {
+            $author->attributes = Yii::$app->request->post('Author');
+            if ($author->validate()) {
+                $author->author_name = Yii::$app->request->post('Author')['author_name'];
+                $author->save();
+            }
+            Yii::$app->getResponse()->redirect('/author');
+        }
+        return $this->render('add',
+            ['author' => $author]
+        );
     }
 
     public function actionEdit()
@@ -38,8 +49,12 @@ class AuthorController extends Controller
         $authorId = Yii::$app->request->get()['id'];
         $author = Author::getById($authorId);
         if (Yii::$app->request->isPost) {
-            $author->author_name = Yii::$app->request->post()['Author']['author_name'];
-            $author->save();
+            $author->attributes = Yii::$app->request->post('Author');
+            if ($author->validate()) {
+                $author->author_name = Yii::$app->request->post('Author')['author_name'];
+                $author->save();
+            }
+
 
             Yii::$app->getResponse()->redirect('/author');
         }
