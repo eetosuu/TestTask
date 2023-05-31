@@ -1,6 +1,7 @@
 <?php
 
 /** @var yii\web\View $this */
+
 /** @var string $content */
 
 use app\assets\AppAsset;
@@ -39,11 +40,12 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav'],
         'items' => [
-            ['label' => 'Home', 'url' => ['/site/index']],
-            ['label' => 'About', 'url' => ['/site/about']],
-            ['label' => 'Contact', 'url' => ['/site/contact']],
-        ]
-    ]);
+            ['label' => 'Книги', 'url' => ['/book/index']],
+            ['label' => 'Авторы', 'url' => ['/author/index']],
+            ['label' => 'Добавить книгу', 'url' => ['/book/add']],
+            ['label' => 'Добавить автора', 'url' => ['/author/add']],
+            ]
+        ]);
     NavBar::end();
     ?>
 </header>
@@ -53,7 +55,6 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
         <?= $content ?>
     </div>
 </main>
-
 
 
 <?php $this->endBody() ?>

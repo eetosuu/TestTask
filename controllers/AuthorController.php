@@ -2,27 +2,25 @@
 
 namespace app\controllers;
 
-use app\models\Book;
+use app\models\Author;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 
-class BookController extends Controller
+class AuthorController extends Controller
 {
+
     public function actionIndex()
     {
-        $books = Book::getAll();
+        $authors = Author::getAll();
 
-        $booksAll = new ActiveDataProvider(
+        $authorsAll = new ActiveDataProvider(
             [
-                'query' => $books,
-                'pagination' => [
-                    'pageSize' => 10,
-                ],
+                'query' => $authors,
             ]
         );
 
         return $this->render('index', [
-            'books' => $booksAll,
+            'authors' => $authorsAll,
         ]);
     }
     public function actionAdd()
