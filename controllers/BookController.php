@@ -8,6 +8,14 @@ use yii\web\Controller;
 
 class BookController extends Controller
 {
+    public function actions()
+    {
+        return [
+            'error' => [
+                'class' => 'yii\web\ErrorAction',
+            ],
+        ];
+    }
     public function actionIndex()
     {
         $books = Book::getAll();

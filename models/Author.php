@@ -41,7 +41,7 @@ class Author extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'author_name' => 'Author Name',
+            'author_name' => 'Имя автора',
         ];
     }
 
@@ -68,5 +68,9 @@ class Author extends \yii\db\ActiveRecord
     public static function getAll()
     {
         return self::find()->asArray();
+    }
+    public static function getById($id)
+    {
+        return self::findOne($id);
     }
 }
