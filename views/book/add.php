@@ -1,9 +1,14 @@
 <?php
 
+use app\models\Book;
 use kartik\select2\Select2;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+
+/** @var Book $book */
+/** @var array $authors */
+/** @var array $genres */
 
 $this->title = 'Создание книги'
 ?>
@@ -12,7 +17,8 @@ $this->title = 'Создание книги'
 
 <?php $form = ActiveForm::begin(); ?>
 <div class="row justify-content-center mt-3">
-    <?= $form->field($book, 'book_name', ['options' => ['class' => 'col-4']])->textInput() ?>
+    <?=
+    $form->field($book, 'book_name', ['options' => ['class' => 'col-4']])->textInput() ?>
 </div>
 <div class="row justify-content-center mt-3">
     <?= $form->field($book, 'publication_date', ['options' => ['class' => 'col-4']])->textInput() ?>

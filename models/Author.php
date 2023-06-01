@@ -3,7 +3,9 @@
 namespace app\models;
 
 
+use yii\base\InvalidConfigException;
 use yii\db\ActiveQuery;
+use yii\db\ActiveRecord;
 
 /**
  * This is the model class for table "author".
@@ -14,12 +16,12 @@ use yii\db\ActiveQuery;
  * @property BookAuthor[] $bookAuthors
  * @property Book[] $books
  */
-class Author extends \yii\db\ActiveRecord
+class Author extends ActiveRecord
 {
     /**
      * {@inheritdoc}
      */
-    public static function tableName()
+    public static function tableName(): string
     {
         return 'author';
     }
@@ -27,7 +29,7 @@ class Author extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
-    public function rules()
+    public function rules(): array
     {
         $messageTooLong = '{attribute} до {max} символов';
         $messageTooShort = '{attribute} от {min} символов.';
@@ -40,7 +42,7 @@ class Author extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
-    public function attributeLabels()
+    public function attributeLabels(): array
     {
         return [
             'id' => 'ID',
@@ -53,7 +55,7 @@ class Author extends \yii\db\ActiveRecord
      *
      * @return ActiveQuery
      */
-    public function getBookAuthors()
+    public function getBookAuthors(): ActiveQuery
     {
         return $this->hasMany(BookAuthor::class, ['author_id' => 'id']);
     }
@@ -62,18 +64,19 @@ class Author extends \yii\db\ActiveRecord
      * Gets query for [[Books]].
      *
      * @return ActiveQuery
+     * @throws InvalidConfigException
      */
-    public function getBooks()
+    public function getBooks(): ActiveQuery
     {
         return $this->hasMany(Book::class, ['id' => 'book_id'])->viaTable('book_author', ['author_id' => 'id']);
     }
 
-    public static function getAll()
+    public static function getAll(): ActiveQuery
     {
         return self::find()->asArray();
     }
 
-    public static function getById($id)
+    public static function getById($id): ?Author
     {
         return self::findOne($id);
     }

@@ -4,10 +4,13 @@ namespace app\controllers;
 
 use app\models\Author;
 use app\models\Book;
+use app\models\BookSearch;
 use app\models\Genre;
 use Yii;
+use yii\base\InvalidRouteException;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
+use yii\web\NotFoundHttpException;
 
 /** @var Book $book */
 class BookController extends Controller
@@ -21,42 +24,30 @@ class BookController extends Controller
         ];
     }
 
-    public function actionIndex()
-    {
-        $books = Book::getAll();
-        $booksAll = new ActiveDataProvider(
-            [
-                'query' => $books,
-                'pagination' => [
-                    'pageSize' => 10,
-                ],
-            ]
-        );
-
-        return $this->render('index', [
-            'books' => $booksAll,
-        ]);
-    }
-
-    public function actionAdd()
+    public function actionIndex(): string
     {
         $genres = Genre::find()->all();
         $authors = Author::find()->all();
-        $book = new Book;
-        if (Yii::$app->request->isPost) {
-            $book->attributes = Yii::$app->request->post('Book');
-            if ($book->validate()) {
-                $book->book_name = Yii::$app->request->post('Book')['book_name'];
-                $book->genre_id = Yii::$app->request->post('Book')['genre_id'];
-                $book->publication_date = Yii::$app->request->post('Book')['publication_date'];
-                $book->authors_ids = [];
-                foreach (Yii::$app->request->post('Book')['authors_book'] as $author_id) {
-                    $book->authors_ids[] = (int)$author_id;
-                }
-                $book->save();
-            }
-            Yii::$app->getResponse()->redirect('/book');
-        }
+        $searchModel = new BookSearch();
+        $dataProvider = $searchModel->search($this->request->queryParams);
+
+        return $this->render('index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+            'genres' => $genres,
+            'authors' => $authors,
+        ]);
+    }
+
+    /**
+     * @throws InvalidRouteException
+     */
+    public function actionAdd(): string
+    {
+        $genres = Genre::find()->all();
+        $authors = Author::find()->all();
+        $book = new Book();
+        $this->completion($book);
 
         return $this->render('add',
             ['book' => $book, 'genres' => $genres,
@@ -66,20 +57,47 @@ class BookController extends Controller
 
     }
 
+    /**
+     * @throws InvalidRouteException
+     * @throws NotFoundHttpException
+     */
     public
-    function actionEdit()
+    function actionEdit($id): string
     {
-        $bookId = Yii::$app->request->get()['id'];
 
-        $book = Book::getById($bookId);
+        $book = $this->findModel($id);
         $genres = Genre::find()->all();
         $authors = Author::find()->all();
+        $this->completion($book);
+
+        return $this->render('edit',
+            ['book' => $book, 'genres' => $genres,
+                'authors' => $authors],
+        );
+    }
+
+    /**
+     * @throws NotFoundHttpException
+     */
+    protected function findModel($id): ?Book
+    {
+        if (($model = Book::findOne(['id' => $id])) !== null) {
+            return $model;
+        }
+
+        throw new NotFoundHttpException('Запрошенная страница не существует.');
+    }
+
+    /**
+     * @param Book|null $book
+     * @return void
+     * @throws InvalidRouteException
+     */
+    public function completion(?Book $book): void
+    {
         if (Yii::$app->request->isPost) {
             $book->attributes = Yii::$app->request->post('Book');
             if ($book->validate()) {
-                $book->book_name = Yii::$app->request->post('Book')['book_name'];
-                $book->genre_id = Yii::$app->request->post('Book')['genre_id'];
-                $book->publication_date = Yii::$app->request->post('Book')['publication_date'];
                 $book->authors_ids = [];
                 foreach (Yii::$app->request->post('Book')['authors_book'] as $author_id) {
                     $book->authors_ids[] = (int)$author_id;
@@ -88,11 +106,6 @@ class BookController extends Controller
             }
             Yii::$app->getResponse()->redirect('/book');
         }
-
-        return $this->render('edit',
-            ['book' => $book, 'genres' => $genres,
-                'authors' => $authors],
-        );
     }
 
 }

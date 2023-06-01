@@ -3,6 +3,8 @@
 namespace app\models;
 
 use Yii;
+use yii\db\ActiveQuery;
+use yii\db\ActiveRecord;
 
 /**
  * This is the model class for table "genre".
@@ -12,12 +14,12 @@ use Yii;
  *
  * @property Book[] $books
  */
-class Genre extends \yii\db\ActiveRecord
+class Genre extends ActiveRecord
 {
     /**
      * {@inheritdoc}
      */
-    public static function tableName()
+    public static function tableName(): string
     {
         return 'genre';
     }
@@ -25,7 +27,7 @@ class Genre extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             [['genre_name'], 'required'],
@@ -36,7 +38,7 @@ class Genre extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
-    public function attributeLabels()
+    public function attributeLabels(): array
     {
         return [
             'id' => 'ID',
@@ -47,9 +49,9 @@ class Genre extends \yii\db\ActiveRecord
     /**
      * Gets query for [[Books]].
      *
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
-    public function getBooks()
+    public function getBooks(): ActiveQuery
     {
         return $this->hasMany(Book::class, ['genre_id' => 'id']);
     }

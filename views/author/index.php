@@ -1,5 +1,6 @@
 <?php
 /** @var yii\web\View $this */
+/** @var array $authors */
 
 use yii\widgets\LinkPager;
 use yii\widgets\ListView;
