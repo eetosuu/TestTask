@@ -94,7 +94,7 @@ class Book extends \yii\db\ActiveRecord
 
     public static function getAll()
     {
-        return self::find()->with('bookAuthors.author')->with('genre')->asArray()->orderBy('book_name');
+        return self::find()->with('bookAuthors.author')->with('genre')->asArray();
 
     }
 

@@ -24,7 +24,6 @@ class BookController extends Controller
     public function actionIndex()
     {
         $books = Book::getAll();
-
         $booksAll = new ActiveDataProvider(
             [
                 'query' => $books,
