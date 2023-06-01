@@ -1,6 +1,5 @@
 <?php
 
-use app\models\Author;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 $this->title = 'Редактирование автора'

@@ -4,9 +4,8 @@ namespace app\models;
 
 use Yii;
 use yii\base\InvalidConfigException;
-use yii\data\ActiveDataProvider;
-use yii\data\Pagination;
 use yii\db\ActiveQuery;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "book".
@@ -22,6 +21,9 @@ use yii\db\ActiveQuery;
  */
 class Book extends \yii\db\ActiveRecord
 {
+    public $authors_ids;
+    public $authors_book;
+
     /**
      * {@inheritdoc}
      */
@@ -36,10 +38,12 @@ class Book extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['book_name', 'genre_id', 'publication_date'], 'required'],
-            [['genre_id', 'publication_date'], 'integer'],
-            [['book_name'], 'string', 'max' => 255],
+            [['book_name', 'genre_id', 'publication_date', 'authors_book'], 'required', 'message' => 'Не может быть пустым'],
+            [['genre_id','publication_date'], 'integer'],
+            [['book_name'], 'string', 'max' => 255, 'min' => 3],
             [['genre_id'], 'exist', 'skipOnError' => true, 'targetClass' => Genre::class, 'targetAttribute' => ['genre_id' => 'id']],
+            [['authors_ids'], 'safe',],
+
         ];
     }
 
@@ -50,9 +54,10 @@ class Book extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'book_name' => 'Book Name',
-            'genre_id' => 'Genre ID',
-            'publication_date' => 'Publication Date',
+            'book_name' => 'Название книги',
+            'genre_id' => 'Жанр',
+            'publication_date' => 'Дата издания',
+            'authors_book' => 'Автор'
         ];
     }
 
@@ -91,6 +96,34 @@ class Book extends \yii\db\ActiveRecord
     {
         return self::find()->with('bookAuthors.author')->with('genre')->asArray()->orderBy('book_name');
 
+    }
+
+    public static function getById($id)
+    {
+        return self::find()
+            ->with('bookAuthors.author')
+            ->with('genre')
+            ->where(['id' => $id])
+            ->one();
+    }
+    public function afterFind()
+    {
+        parent::afterFind();
+
+        $this->authors_ids = ArrayHelper::getColumn($this->authors, 'id');
+
+    }
+    public function afterSave($insert, $changedAttributes)
+    {
+        if (!$this->isNewRecord) {
+            $this->unlinkAll('authors', true);
+        }
+
+        foreach ($this->authors_ids as $author_id) {
+            $author = Author::findOne($author_id);
+           $this->link('authors', $author);
+        }
+        parent::afterSave($insert, $changedAttributes);
     }
 
 }

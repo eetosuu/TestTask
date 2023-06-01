@@ -2,7 +2,8 @@
 
 namespace app\models;
 
-use Yii;
+
+use yii\db\ActiveQuery;
 
 /**
  * This is the model class for table "author".
@@ -31,8 +32,8 @@ class Author extends \yii\db\ActiveRecord
         $messageTooLong = '{attribute} до {max} символов';
         $messageTooShort = '{attribute} от {min} символов.';
         return [
-            [['author_name'], 'required','message' => 'Заполните имя автора'],
-            [['author_name'], 'string', 'min' => 3, 'max' => 50, 'tooLong' => $messageTooLong, 'tooShort' => $messageTooShort ],
+            [['author_name'], 'required', 'message' => 'Заполните имя автора'],
+            [['author_name'], 'string', 'min' => 3, 'max' => 50, 'tooLong' => $messageTooLong, 'tooShort' => $messageTooShort],
         ];
     }
 
@@ -50,7 +51,7 @@ class Author extends \yii\db\ActiveRecord
     /**
      * Gets query for [[BookAuthors]].
      *
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
     public function getBookAuthors()
     {
@@ -60,7 +61,7 @@ class Author extends \yii\db\ActiveRecord
     /**
      * Gets query for [[Books]].
      *
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
     public function getBooks()
     {
@@ -71,8 +72,10 @@ class Author extends \yii\db\ActiveRecord
     {
         return self::find()->asArray();
     }
+
     public static function getById($id)
     {
         return self::findOne($id);
     }
+
 }
