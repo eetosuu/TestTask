@@ -7,7 +7,11 @@ use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
-$this->title = 'Редактирование книги'
+if (!empty(Yii::$app->request->get('id'))) {
+    $this->title = 'Редактирование книги';
+} else {
+    $this->title = 'Создание книги';
+}
 
 /** @var Book $book */
 /** @var array $genres */

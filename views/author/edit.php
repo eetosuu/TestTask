@@ -6,7 +6,12 @@ use yii\widgets\ActiveForm;
 
 /** @var Author $author */
 
-$this->title = 'Редактирование автора'
+if (!empty(Yii::$app->request->get('id'))) {
+    $this->title = 'Редактирование автора';
+} else {
+    $this->title = 'Создание автора автора';
+}
+
 ?>
     <h2 class="text-center mt-2"><?= $this->title ?></h2>
 <?php $form = ActiveForm::begin(); ?>
