@@ -4,18 +4,31 @@ namespace app\controllers;
 
 use app\models\Author;
 use app\models\Book;
-use app\models\BookSearch;
 use app\models\Genre;
+use app\models\search\BookSearch;
 use Yii;
 use yii\base\InvalidRouteException;
-use yii\data\ActiveDataProvider;
+use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 
 /** @var Book $book */
 class BookController extends Controller
 {
-    public function actions()
+    public function behaviors(): array
+    {
+        return [
+            'verbs' => [
+                'class' => VerbFilter::class,
+                'actions' => [
+                    'index' => ['GET'],
+                    'edit' => ['GET', 'POST'],
+                ],
+            ],
+        ];
+    }
+
+    public function actions(): array
     {
         return [
             'error' => [
@@ -40,36 +53,19 @@ class BookController extends Controller
     }
 
     /**
-     * @throws InvalidRouteException
+     * @throws InvalidRouteException|NotFoundHttpException
      */
-    public function actionAdd(): string
+    public function actionEdit($id = ''): string
     {
         $genres = Genre::find()->all();
         $authors = Author::find()->all();
-        $book = new Book();
+
+        if (!empty($id)) {
+            $book = $this->findModel($id);
+        } else {
+            $book = new Book();
+        }
         $this->completion($book);
-
-        return $this->render('add',
-            ['book' => $book, 'genres' => $genres,
-                'authors' => $authors],
-        );
-
-
-    }
-
-    /**
-     * @throws InvalidRouteException
-     * @throws NotFoundHttpException
-     */
-    public
-    function actionEdit($id): string
-    {
-
-        $book = $this->findModel($id);
-        $genres = Genre::find()->all();
-        $authors = Author::find()->all();
-        $this->completion($book);
-
         return $this->render('edit',
             ['book' => $book, 'genres' => $genres,
                 'authors' => $authors],
@@ -104,6 +100,7 @@ class BookController extends Controller
                 }
                 $book->save();
             }
+
             Yii::$app->getResponse()->redirect('/book');
         }
     }

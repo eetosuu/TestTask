@@ -43,9 +43,8 @@ class Book extends \yii\db\ActiveRecord
             [['genre_id', 'publication_date'], 'integer'],
             [['book_name'], 'string', 'max' => 255, 'min' => 3],
             [['genre_id'], 'exist', 'skipOnError' => true, 'targetClass' => Genre::class, 'targetAttribute' => ['genre_id' => 'id']],
-            [['publication_date'], 'integer', 'min' => 1, 'max'=> 2023, 'tooBig' => $dateMessage, 'tooSmall' => $dateMessage],
+            [['publication_date'], 'integer', 'min' => 1, 'max' => 2023, 'tooBig' => $dateMessage, 'tooSmall' => $dateMessage],
             [['authors_ids'], 'safe',],
-
         ];
     }
 
@@ -97,7 +96,6 @@ class Book extends \yii\db\ActiveRecord
     public static function getAll(): ActiveQuery
     {
         return self::find()->with('bookAuthors.author')->with('genre')->asArray();
-
     }
 
     public static function getById($id)
@@ -112,9 +110,7 @@ class Book extends \yii\db\ActiveRecord
     public function afterFind()
     {
         parent::afterFind();
-
         $this->authors_ids = ArrayHelper::getColumn($this->authors, 'id');
-
     }
 
     public function afterSave($insert, $changedAttributes)

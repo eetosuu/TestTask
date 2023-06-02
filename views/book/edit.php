@@ -19,27 +19,27 @@ $this->title = 'Редактирование книги'
 
 <?php $form = ActiveForm::begin(); ?>
 <div class="row justify-content-center mt-3">
-<?= $form->field($book, 'book_name', ['options' => ['class' => 'col-4']])->textInput(['value' => $book['book_name']]) ?>
+    <?= $form->field($book, 'book_name', ['options' => ['class' => 'col-4']])->textInput(['value' => $book['book_name'] ?? '']) ?>
 </div>
 <div class="row justify-content-center mt-3">
-<?= $form->field($book, 'publication_date', ['options' => ['class' => 'col-4']])->textInput(['value' => $book['publication_date']]) ?>
+    <?= $form->field($book, 'publication_date', ['options' => ['class' => 'col-4']])->textInput(['value' => $book['publication_date'] ?? '']) ?>
 </div>
 <div class="row justify-content-center mt-3">
-<?=
-$form->field($book, 'genre_id', ['options' => ['class' => 'col-4']])
-    ->dropDownList(
-        ArrayHelper::map($genres, 'id', 'genre_name'))
-?>
+    <?=
+    $form->field($book, 'genre_id', ['options' => ['class' => 'col-4']])
+        ->dropDownList(
+            ArrayHelper::map($genres, 'id', 'genre_name'))
+    ?>
 </div>
 <div class="row justify-content-center mt-3">
-<?=
-$form->field($book, 'authors_book', ['options' => ['class' => 'col-4']])->widget(Select2::class, [
-    'data' => ArrayHelper::map($authors, 'id', 'author_name'),
-    'theme' => Select2::THEME_BOOTSTRAP,
-    'options' => ['multiple' => true, 'value' =>$book->authors_ids,]
-]);
+    <?=
+    $form->field($book, 'authors_book', ['options' => ['class' => 'col-4']])->widget(Select2::class, [
+        'data' => ArrayHelper::map($authors, 'id', 'author_name'),
+        'theme' => Select2::THEME_BOOTSTRAP,
+        'options' => ['multiple' => true, 'value' => $book->authors_ids,]
+    ]);
 
-?>
+    ?>
 </div>
 <div class="row justify-content-center mt-3">
     <div class="col-3 d-flex justify-content-center">

@@ -1,12 +1,11 @@
 <?php
 
-use yii\helpers\Html;
 use yii\widgets\LinkPager;
 use yii\widgets\ListView;
 use yii\widgets\Pjax;
 
 /** @var yii\web\View $this */
-/** @var app\models\BookSearch $searchModel */
+/** @var \app\models\search\BookSearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
 /** @var array $authors */
 /** @var array $genres */

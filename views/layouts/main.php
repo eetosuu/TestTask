@@ -42,8 +42,8 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
         'items' => [
             ['label' => 'Книги', 'url' => ['/book/index']],
             ['label' => 'Авторы', 'url' => ['/author/index']],
-            ['label' => 'Добавить книгу', 'url' => ['/book/add']],
-            ['label' => 'Добавить автора', 'url' => ['/author/add']],
+            ['label' => 'Добавить книгу', 'url' => ['/book/edit']],
+            ['label' => 'Добавить автора', 'url' => ['/author/edit']],
             ]
         ]);
     NavBar::end();

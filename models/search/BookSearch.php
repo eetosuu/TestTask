@@ -1,10 +1,10 @@
 <?php
 
-namespace app\models;
+namespace app\models\search;
 
+use app\models\Book;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\Book;
 
 /**
  * BookSearch represents the model behind the search form of `app\models\Book`.
@@ -53,9 +53,7 @@ class BookSearch extends Book
      */
     public function search(array $params): ActiveDataProvider
     {
-
         $query = Book::find();
-
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -64,11 +62,10 @@ class BookSearch extends Book
             ],
         ]);
 
-        $this->load($params);
-
-        if (!$this->validate()) {
+        if ($this->load($params) && !$this->validate()) {
             return $dataProvider;
         }
+
         $query->joinWith('authors');
         $query->andFilterWhere([
             'id' => $this->id,
@@ -76,14 +73,14 @@ class BookSearch extends Book
             'publication_date' => $this->publication_date,
             'author_id' => $this->authors_book,
         ]);
-        if (!is_null($this->fromDate)) {
+
+        if (!empty($this->fromDate)) {
             if (!empty($this->toDate)) {
                 $query->andFilterWhere(['between', 'publication_date', $this->fromDate, $this->toDate]);
             } else {
                 $query->andFilterWhere(['>=', 'publication_date', $this->fromDate]);
             }
-
-        } else {
+        } elseif (!empty($this->toDate)) {
             $query->andFilterWhere(['<=', 'publication_date', $this->toDate]);
         }
 

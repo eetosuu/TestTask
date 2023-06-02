@@ -4,15 +4,29 @@ namespace app\controllers;
 
 use app\models\Author;
 use Yii;
+use yii\base\InvalidRouteException;
 use yii\data\ActiveDataProvider;
+use yii\filters\VerbFilter;
 use yii\web\Controller;
 
 class AuthorController extends Controller
 {
-
-    public function actionIndex()
+    public function behaviors(): array
     {
-        $authors = Author::getAll();
+        return [
+            'verbs' => [
+                'class' => VerbFilter::class,
+                'actions' => [
+                    'index' => ['GET'],
+                    'edit' => ['GET', 'POST'],
+                ],
+            ],
+        ];
+    }
+
+    public function actionIndex(): string
+    {
+        $authors = Author::find();
 
         $authorsAll = new ActiveDataProvider(
             [
@@ -28,40 +42,34 @@ class AuthorController extends Controller
         ]);
     }
 
-    public function actionAdd()
+    public function actionEdit($id = ''): string
     {
-        $author = new Author();
-        if (Yii::$app->request->isPost) {
-            $author->attributes = Yii::$app->request->post('Author');
-            if ($author->validate()) {
-                $author->author_name = Yii::$app->request->post('Author')['author_name'];
-                $author->save();
-            }
-            Yii::$app->getResponse()->redirect('/author');
+        if (!empty($id)) {
+            $author = Author::findOne($id);
+        } else {
+            $author = new Author();
         }
-        return $this->render('add',
-            ['author' => $author]
-        );
-    }
 
-    public function actionEdit()
-    {
-        $authorId = Yii::$app->request->get()['id'];
-        $author = Author::getById($authorId);
-        if (Yii::$app->request->isPost) {
-            $author->attributes = Yii::$app->request->post('Author');
-            if ($author->validate()) {
-                $author->author_name = Yii::$app->request->post('Author')['author_name'];
-                $author->save();
-            }
+        $this->completion($author);
 
-
-            Yii::$app->getResponse()->redirect('/author');
-        }
         return $this->render('edit',
             ['author' => $author]
         );
-
     }
 
+    /**
+     * @throws InvalidRouteException
+     */
+    public function completion(?Author $author): void
+    {
+        if (Yii::$app->request->isPost) {
+            $author->attributes = Yii::$app->request->post('Author');
+            if ($author->validate()) {
+                $author->author_name = Yii::$app->request->post('Author')['author_name'];
+                $author->save();
+            }
+
+            Yii::$app->getResponse()->redirect('/book');
+        }
+    }
 }

@@ -2,6 +2,8 @@
 
 /** @var array $model */
 
+use yii\helpers\Html;
+
 ?>
 
 
@@ -10,8 +12,7 @@
         <div class="d-flex justify-content-between">
             <span class="card-title fs-5"><?=
                 $model['book_name'] ?></span>
-            <a href="/book/edit?id=<?= $model['id'] ?>"
-               class="btn btn-outline-success align-self-start">Ред.</a>
+            <?= Html::a('Ред.', ['/book/edit', 'id' => $model['id']], ['class' => 'btn btn-outline-success align-self-start']) ?>
         </div>
         <div class="card-subtitle mb-2 fs-6">
             <?php $authors = [] ?>
