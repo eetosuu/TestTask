@@ -94,9 +94,9 @@ class BookController extends Controller
         if (Yii::$app->request->isPost) {
             $book->attributes = Yii::$app->request->post('Book');
             if ($book->validate()) {
-                $book->authors_ids = [];
+                $book->authors_book = [];
                 foreach (Yii::$app->request->post('Book')['authors_book'] as $author_id) {
-                    $book->authors_ids[] = (int)$author_id;
+                    $book->authors_book[] = (int)$author_id;
                 }
                 $book->save();
             }
@@ -104,5 +104,4 @@ class BookController extends Controller
             Yii::$app->getResponse()->redirect('/book');
         }
     }
-
 }

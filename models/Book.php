@@ -21,7 +21,6 @@ use yii\helpers\ArrayHelper;
  */
 class Book extends \yii\db\ActiveRecord
 {
-    public $authors_ids;
     public $authors_book;
 
     /**
@@ -44,7 +43,6 @@ class Book extends \yii\db\ActiveRecord
             [['book_name'], 'string', 'max' => 255, 'min' => 3],
             [['genre_id'], 'exist', 'skipOnError' => true, 'targetClass' => Genre::class, 'targetAttribute' => ['genre_id' => 'id']],
             [['publication_date'], 'integer', 'min' => 1, 'max' => 2023, 'tooBig' => $dateMessage, 'tooSmall' => $dateMessage],
-            [['authors_ids'], 'safe',],
         ];
     }
 
@@ -110,7 +108,7 @@ class Book extends \yii\db\ActiveRecord
     public function afterFind()
     {
         parent::afterFind();
-        $this->authors_ids = ArrayHelper::getColumn($this->authors, 'id');
+        $this->authors_book = ArrayHelper::getColumn($this->authors, 'id');
     }
 
     public function afterSave($insert, $changedAttributes)
@@ -120,11 +118,9 @@ class Book extends \yii\db\ActiveRecord
             $this->unlinkAll('authors', true);
         }
 
-        foreach ($this->authors_ids as $author_id) {
+        foreach ($this->authors_book as $author_id) {
             $author = Author::findOne($author_id);
             $this->link('authors', $author);
         }
-
     }
-
 }

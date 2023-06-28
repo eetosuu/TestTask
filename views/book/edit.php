@@ -40,7 +40,7 @@ if (!empty(Yii::$app->request->get('id'))) {
     $form->field($book, 'authors_book', ['options' => ['class' => 'col-4']])->widget(Select2::class, [
         'data' => ArrayHelper::map($authors, 'id', 'author_name'),
         'theme' => Select2::THEME_BOOTSTRAP,
-        'options' => ['multiple' => true, 'value' => $book->authors_ids,]
+        'options' => ['multiple' => true, 'value' => $book->authors_book,]
     ]);
 
     ?>

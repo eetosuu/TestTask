@@ -14,7 +14,7 @@ use yii\helpers\Html;
                 $model['book_name'] ?></span>
             <?= Html::a('Ред.', ['/book/edit', 'id' => $model['id']], ['class' => 'btn btn-outline-success align-self-start']) ?>
         </div>
-        <div class="card-subtitle mb-2 fs-6">
+        <div class="card-subtitle mb-2 pt-3 fs-6">
             <?php $authors = [] ?>
             <?php foreach ($model['bookAuthors'] as $author): ?>
                 <?php

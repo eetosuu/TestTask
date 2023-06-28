@@ -39,3 +39,13 @@ a.asc:after, a.desc:after {
     height: 40px;
     overflow: auto;
 }
+.empty {
+    text-align: center;
+}
+#booksearch-fromdate, #booksearch-todate {
+    height: 40px;
+}
+
+.card-body {
+    min-height: 190px;
+}
