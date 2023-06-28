@@ -15,7 +15,7 @@ class DataController extends Controller
     /**
      * @throws Exception
      */
-    public function actionCreate($countBook, $countGenres = 5, $countAuthors = 10)
+    public function actionCreate($countBook = 5, $countGenres = 5, $countAuthors = 10)
     {
         $faker = Factory::create();
         $currentCountGenres = Yii::$app->db->createCommand('SELECT MAX(id) FROM genre')->queryScalar();
