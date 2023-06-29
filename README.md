@@ -47,6 +47,6 @@ COMMANDS
 -------------
 Создает тестовые данные, аргументы необязательны (countBook, countGenres, countAuthors)
 ```
-php yii author/create
-php yii author/create 1 1 1 # создает 1 книгу, 1 жанр, 1 автора
+php yii data/create
+php yii data/create 1 1 1 # создает 1 книгу, 1 жанр, 1 автора
 ```
