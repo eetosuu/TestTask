@@ -19,7 +19,6 @@ class DataController extends Controller
     {
         $faker = Factory::create();
         $currentCountGenres = Yii::$app->db->createCommand('SELECT MAX(id) FROM genre')->queryScalar();
-        $currentCountAuthors = Yii::$app->db->createCommand('SELECT MAX(id) FROM author')->queryScalar();
 
         $authors = [];
         $genres = [];
@@ -31,6 +30,7 @@ class DataController extends Controller
         }
 
         Yii::$app->db->createCommand()->batchInsert('author', ['author_name'], $authors)->execute();
+        $currentCountAuthors = Yii::$app->db->createCommand('SELECT MAX(id) FROM author')->queryScalar();
 
         for ($k = 0; $k < $countGenres; $k++) {
             $genres[] = [
@@ -40,10 +40,16 @@ class DataController extends Controller
 
         Yii::$app->db->createCommand()->batchInsert('genre', ['genre_name'], $genres)->execute();
 
-        for ($j = 0; $j < $countBook; $j++) {
+        if ($currentCountAuthors == 0 && $countAuthors == 0) {
+            die('Книги не созданы, так как нет авторов');
+        }
 
-            $authors_book = [];
+        for ($j = 0; $j < $countBook; $j++) {
             $randomNumberAuthors = $faker->numberBetween(1, 3);
+            if ($currentCountAuthors < 3) {
+                $randomNumberAuthors = $faker->numberBetween(1, $currentCountAuthors);
+            }
+            $authors_book = [];
 
             for ($i = 0; $i < $randomNumberAuthors; $i++) {
                 $authors_book[] = [
